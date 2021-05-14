@@ -1,5 +1,7 @@
 package com.yellowdogprod.rootsandbones.registration;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,8 +24,10 @@ public class RegistrationController {
 	private RegistrationService registrationService;
 	
 	@PostMapping
-	public ResponseBean<User> register(@RequestBody RegistrationRequest request) {
-		return registrationService.register(request);
+	public ResponseBean<User> register(@RequestBody RegistrationRequest request, HttpSession session) {
+		ResponseBean<User> user = registrationService.register(request);
+		session.setAttribute("userId", user.getResult().getId());
+		return user;
 	}
 	
     @GetMapping(path = "confirm")

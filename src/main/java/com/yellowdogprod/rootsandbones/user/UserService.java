@@ -104,4 +104,15 @@ public class UserService implements UserDetailsService{
     	return new ResponseBean<User>(user.get());
     }
 
+
+	public User getUserById(Long userId) {
+		Optional<User> user = userRepository.findById(userId);
+		if(user.isPresent()) return user.get();
+		return null;
+	}
+	
+	public User updateUser(User user) {
+		return userRepository.save(user);
+	}
+
 }

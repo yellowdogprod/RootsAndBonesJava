@@ -1,4 +1,4 @@
-package com.yellowdogprod.rootsandbones.user;
+package com.yellowdogprod.rootsandbones.creature;
 
 import javax.servlet.http.HttpSession;
 
@@ -13,19 +13,20 @@ import com.yellowdogprod.rootsandbones.ResponseBean;
 import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping(path = "api/v1/login")
+@RequestMapping(path = "api/v1/creatures")
 @AllArgsConstructor
-public class UserController {
+public class CreatureController {
 	
 	@Autowired
-	private UserService userService;
+	private CreatureService creatureService;
 	
 	@PostMapping
-	public ResponseBean<User> login(@RequestBody LoginRequest request, HttpSession session){
-		ResponseBean<User> user = userService.login(request.getUsername(), request.getPassword());
-		session.setAttribute("userId", user.getResult().getId());
-		return user;
+	public ResponseBean<Creature> create(@RequestBody CreatureRequest req, HttpSession session){
+
+		Long userId = (Long)session.getAttribute("userId");
+		
+		return creatureService.create(req, userId);
+		
 	}
 
 }
-
