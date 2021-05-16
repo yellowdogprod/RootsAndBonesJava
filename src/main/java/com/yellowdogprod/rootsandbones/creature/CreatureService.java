@@ -1,5 +1,7 @@
 package com.yellowdogprod.rootsandbones.creature;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,22 @@ public class CreatureService {
 		
 		return new ResponseBean<Creature>(creature, "Creature saved succesfully.");
 		
+	}
+	
+	public ResponseBean<List<Creature>> getProfileCreatures(Long profileId){
+		List<Creature> creatures = creatureRepository.getProfileCreatures(profileId).get();
+		return new ResponseBean<List<Creature>>(creatures);
+	}
+	
+	public ResponseBean<Boolean> deployCreature(Long userId, Long creatureId) {
+		User user = userService.getUserById(userId);
+		Creature creature = creatureRepository.getOne(creatureId);
+		if(creature.getProfile().getId() != user.getProfile().getId()) {
+			return ResponseBean.error("Wrong creature id.");
+		}
+		creature.setOnField(true);
+		creatureRepository.save(creature);
+		return new ResponseBean<Boolean>(true);
 	}
 	
 }

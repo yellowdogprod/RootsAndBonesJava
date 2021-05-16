@@ -26,7 +26,8 @@ public class RegistrationController {
 	@PostMapping
 	public ResponseBean<User> register(@RequestBody RegistrationRequest request, HttpSession session) {
 		ResponseBean<User> user = registrationService.register(request);
-		session.setAttribute("userId", user.getResult().getId());
+		if(user.getCode() == 200)
+			session.setAttribute("userId", user.getResult().getId());
 		return user;
 	}
 	

@@ -35,6 +35,7 @@ public class RegistrationService {
 	@Autowired
 	private EmailSender emailSender;
 	
+	@Transactional
 	public ResponseBean<User> register(RegistrationRequest request) {
 		boolean isValidEmail = emailValidator.test(request.getEmail());
 		if(!isValidEmail) {

@@ -37,6 +37,9 @@ public class Creature {
     private Profile profile;
 	
 	private String parts;
+	private Float x;
+	private Float y;
+	private Boolean onField = false;
 	
 	
 }
