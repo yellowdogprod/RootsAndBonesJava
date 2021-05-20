@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yellowdogprod.rootsandbones.ResponseBean;
+import com.yellowdogprod.rootsandbones.beans.VectorBean;
 import com.yellowdogprod.rootsandbones.user.User;
 import com.yellowdogprod.rootsandbones.user.UserService;
 import com.yellowdogprod.rootsandbones.utils.ResourceUtils;
@@ -48,13 +49,29 @@ public class CreatureService {
 		return new ResponseBean<List<Creature>>(creatures);
 	}
 	
-	public ResponseBean<Boolean> deployCreature(Long userId, Long creatureId) {
+	public ResponseBean<Boolean> deployCreature(Long userId, Long creatureId, VectorBean pos) {
 		User user = userService.getUserById(userId);
 		Creature creature = creatureRepository.getOne(creatureId);
 		if(creature.getProfile().getId() != user.getProfile().getId()) {
 			return ResponseBean.error("Wrong creature id.");
 		}
 		creature.setOnField(true);
+		if(pos != null) {
+			creature.setX(pos.getX());
+			creature.setY(pos.getY());
+		}
+		creatureRepository.save(creature);
+		return new ResponseBean<Boolean>(true);
+	}
+
+	public ResponseBean<Boolean> moveCreature(Long userId, Long creatureId, VectorBean pos) {
+		User user = userService.getUserById(userId);
+		Creature creature = creatureRepository.getOne(creatureId);
+		if(creature.getProfile().getId() != user.getProfile().getId()) {
+			return ResponseBean.error("Wrong creature id.");
+		}
+		creature.setX(pos.getX());
+		creature.setY(pos.getY());
 		creatureRepository.save(creature);
 		return new ResponseBean<Boolean>(true);
 	}

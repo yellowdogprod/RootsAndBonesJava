@@ -34,11 +34,10 @@ import lombok.Setter;
 @Entity
 public class User implements UserDetails{
 
-	@SequenceGenerator(name="user_sequence",
-	sequenceName = "user_sequence", allocationSize = 1)
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
+
+	@Id @GeneratedValue
 	private Long id;
+
 	private String username;
 	private String email;
 	private String password;

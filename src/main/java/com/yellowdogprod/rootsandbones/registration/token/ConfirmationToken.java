@@ -23,11 +23,10 @@ import lombok.Setter;
 @Entity
 public class ConfirmationToken {
 
-	@SequenceGenerator(name="token_sequence",
-	sequenceName = "token_sequence", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "token_sequence")
-	@Id
+
+	@Id @GeneratedValue
 	private Long id;
+	
 	@Column(nullable = false)
 	private String token;
 	@Column(nullable = false)
