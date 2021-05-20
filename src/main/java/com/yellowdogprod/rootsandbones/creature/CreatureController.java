@@ -48,7 +48,7 @@ public class CreatureController {
 	@PutMapping
 	public ResponseBean<Boolean> deployCreature(HttpSession session, @RequestBody CreatureRequest req){
 		Long userId = (Long)session.getAttribute("userId");
-		return creatureService.deployCreature(userId, req.getCreature().getId(), req.getPosition());
+		return creatureService.deployCreature(userId, req);
 	}
 	
 	

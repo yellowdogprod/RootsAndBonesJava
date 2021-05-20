@@ -49,16 +49,18 @@ public class CreatureService {
 		return new ResponseBean<List<Creature>>(creatures);
 	}
 	
-	public ResponseBean<Boolean> deployCreature(Long userId, Long creatureId, VectorBean pos) {
+	public ResponseBean<Boolean> deployCreature(Long userId, CreatureRequest req) {
 		User user = userService.getUserById(userId);
-		Creature creature = creatureRepository.getOne(creatureId);
+		Creature creature = creatureRepository.getOne(req.getCreature().getId());
 		if(creature.getProfile().getId() != user.getProfile().getId()) {
 			return ResponseBean.error("Wrong creature id.");
 		}
-		creature.setOnField(true);
-		if(pos != null) {
-			creature.setX(pos.getX());
-			creature.setY(pos.getY());
+		if(req.getDeploy()) {
+			creature.setOnField(true);
+			creature.setX(req.getPosition().getX());
+			creature.setY(req.getPosition().getY());
+		}else {
+			creature.setOnField(false);
 		}
 		creatureRepository.save(creature);
 		return new ResponseBean<Boolean>(true);
