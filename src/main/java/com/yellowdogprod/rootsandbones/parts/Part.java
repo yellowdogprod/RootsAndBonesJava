@@ -13,6 +13,7 @@ import javax.persistence.SequenceGenerator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yellowdogprod.rootsandbones.creature.Creature;
 import com.yellowdogprod.rootsandbones.profile.Profile;
+import com.yellowdogprod.rootsandbones.zone.Zone;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -33,6 +34,10 @@ public class Part {
 	@ManyToMany(mappedBy = "parts", fetch = FetchType.LAZY)
 	private List<Creature> creatures;
 	
+	@JsonIgnore
+	@ManyToMany(mappedBy = "parts", fetch = FetchType.LAZY)
+	private List<Zone> zones;
+	
 	private String name;
 	private String type;
 	private String prefabName;
@@ -40,6 +45,7 @@ public class Part {
 	private Integer bones;
 	private Integer roots;
 	private Integer leaves;
+	private Integer level;
 	
 }
 

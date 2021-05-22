@@ -1,9 +1,9 @@
-Skinny Meat Arms,arms-zombie-1,ARMS,1,1,0,0
-Thick Skin Arms,arms-zombie-2,ARMS,2,1,0,0
-Lil' Belly Button,body-zombie-1,BODY,1,1,0,0
-Aggression,body-zombie-2,BODY,2,2,0,0
-Tender Brain,head-zombie-1,HEAD,1,1,0,0
-Thick Skull,head-zombie-2,HEAD,1,2,0,0
-Skinny Meat Legs,legs-zombie-1,LEGS,1,1,0,0
-Fatties,legs-zombie-2,LEGS,2,1,0,0
-Spiked Horns,horns-small-1,HORNS,0,1,0,0
+Skinny Meat Arms,arms-zombie-1,ARMS,1,1,0,0,1
+Thick Skin Arms,arms-zombie-2,ARMS,2,1,0,0,2
+Lil' Belly Button,body-zombie-1,BODY,1,1,0,0,1
+Aggression,body-zombie-2,BODY,2,2,0,0,2
+Tender Brain,head-zombie-1,HEAD,1,1,0,0,1
+Thick Skull,head-zombie-2,HEAD,1,2,0,0,2
+Skinny Meat Legs,legs-zombie-1,LEGS,1,1,0,0,1
+Fatties,legs-zombie-2,LEGS,2,1,0,0,2
+Spiked Horns,horns-small-1,HORNS,0,1,0,0,2
