@@ -90,6 +90,7 @@ public class UserService implements UserDetailsService{
     }
     
     public ResponseBean<User> login(String username, String password) {
+    	LOGGER.info(username+" is logging in.");
     	String encodedPassword = bCryptPasswordEncoder.encode(password);
     	Optional<User> user = userRepository.findByUsername(username);
     	if(!user.isPresent()) {

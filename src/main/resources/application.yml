@@ -2,14 +2,14 @@ server:
   error:
     include-message: always
     include-binding-errors: always
-  port: 8080
+  port: 3000
 
 spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     #password: root
     password: root
-    url: jdbc:mysql://localhost:3306/rootsandbones
+    url: jdbc:mysql://localhost:3308/rootsandbones
     username: root
   jpa:
     #hibernate.ddl-auto: update

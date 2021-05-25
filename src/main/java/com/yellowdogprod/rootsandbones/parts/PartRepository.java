@@ -10,5 +10,6 @@ public interface PartRepository extends JpaRepository<Part, Long>{
     @Query("SELECT p FROM Part p" +
             " WHERE p.prefabName = ?1")
 	Part getByPrefabName(String prefabName);	
-	
+    
+    
 }
