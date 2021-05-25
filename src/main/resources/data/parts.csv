@@ -1,9 +1,12 @@
 Skinny Meat Arms,arms-zombie-1,ARMS,1,1,0,0,1
 Thick Skin Arms,arms-zombie-2,ARMS,2,1,0,0,2
+Brambles,arms-plant-tangle-1,ARMS,0,0,1,1,1
 Lil' Belly Button,body-zombie-1,BODY,1,1,0,0,1
 Aggression,body-zombie-2,BODY,2,2,0,0,2
+TangleBall,body-plant-tangle-1,BODY,0,0,1,2,1
 Tender Brain,head-zombie-1,HEAD,1,1,0,0,1
 Thick Skull,head-zombie-2,HEAD,1,2,0,0,2
+Bark boy,head-bark-1,HEAD,0,0,0,3,2
 Skinny Meat Legs,legs-zombie-1,LEGS,1,1,0,0,1
 Fatties,legs-zombie-2,LEGS,2,1,0,0,2
 Spiked Horns,horns-small-1,HORNS,0,1,0,0,2
