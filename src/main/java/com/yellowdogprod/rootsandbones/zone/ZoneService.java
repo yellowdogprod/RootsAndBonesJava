@@ -2,6 +2,7 @@ package com.yellowdogprod.rootsandbones.zone;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -29,6 +30,15 @@ public class ZoneService {
 
 		zoneRepo.save(zone);
 
+	}
+	
+	public ResponseBean<Zone> get(Long zoneId) {
+		Optional<Zone> zone = zoneRepo.findById(zoneId);
+		if(zone.isPresent()) {
+			return new ResponseBean<Zone>(zone.get());
+		}else {
+			return ResponseBean.error("Zone not found.");
+		}
 	}
 
 	public ResponseBean<List<Creature>> getCreaturesToFight(Long zoneId) {

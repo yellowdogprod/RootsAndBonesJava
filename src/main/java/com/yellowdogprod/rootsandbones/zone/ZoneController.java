@@ -32,4 +32,10 @@ public class ZoneController {
 		return zoneService.getCreaturesToFight(zoneId);
 	}
 	
+	@GetMapping(path="/{zoneId}")
+	public ResponseBean<Zone> getZone(HttpSession session, @PathVariable(name="zoneId") Long zoneId){
+		Long userId = (Long)session.getAttribute("userId");
+		return zoneService.get(zoneId);
+	}
+	
 }
