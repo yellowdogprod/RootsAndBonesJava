@@ -41,11 +41,12 @@ public class Part {
 	private String name;
 	private String type;
 	private String prefabName;
+	private Integer level;
 	private Integer flesh;
 	private Integer bones;
 	private Integer roots;
 	private Integer leaves;
-	private Integer level;
+	
 	
 }
 

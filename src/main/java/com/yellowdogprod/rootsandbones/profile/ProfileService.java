@@ -27,18 +27,21 @@ public class ProfileService {
 		Profile profile = new Profile();
 		profile.setUser(user);
 		//TEST
+		profile.setParts(new ArrayList<Part>());
 		if(user.getUsername().equalsIgnoreCase("root")) {
 			profile.setBones(100);
 			profile.setRoots(100);
 			profile.setFlesh(100);
 			profile.setLeaves(100);
+			profile.getParts().addAll(partRepository.findAll());
+		}else {
+			for(String partName : initialParts) {
+				Part part = partRepository.getByPrefabName(partName);
+				profile.getParts().add(part);
+			}
+			
 		}
 		
-		profile.setParts(new ArrayList<Part>());
-		for(String partName : initialParts) {
-			Part part = partRepository.getByPrefabName(partName);
-			profile.getParts().add(part);
-		}
 		
 		profile = profileRepository.save(profile);
 		return profile;

@@ -61,11 +61,13 @@ public class OnStartUp implements CommandLineRunner {
 				newPart.setPrefabName(data[1]);
 				PartType pt = PartType.valueOf(data[2]);
 				newPart.setType(pt.toString());
-				newPart.setFlesh(Integer.parseInt(data[3]));
-				newPart.setBones(Integer.parseInt(data[4]));
-				newPart.setLeaves(Integer.parseInt(data[5]));
-				newPart.setRoots(Integer.parseInt(data[6]));
-				newPart.setLevel(Integer.parseInt(data[7]));
+				newPart.setLevel(Integer.parseInt(data[3]));
+				newPart.setFlesh(Integer.parseInt(data[4]));
+				newPart.setBones(Integer.parseInt(data[5]));
+				newPart.setLeaves(Integer.parseInt(data[6]));
+				newPart.setRoots(Integer.parseInt(data[7]));
+
+				
 				partService.save(newPart);
 				partsLoaded.add(newPart);
 			}
