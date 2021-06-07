@@ -19,6 +19,8 @@ import com.yellowdogprod.rootsandbones.parts.PartService;
 import com.yellowdogprod.rootsandbones.parts.PartType;
 import com.yellowdogprod.rootsandbones.registration.RegistrationRequest;
 import com.yellowdogprod.rootsandbones.registration.RegistrationService;
+import com.yellowdogprod.rootsandbones.utils.CreatureUtils;
+import com.yellowdogprod.rootsandbones.utils.ZoneUtils;
 import com.yellowdogprod.rootsandbones.zone.Zone;
 import com.yellowdogprod.rootsandbones.zone.ZoneService;
 
@@ -87,71 +89,39 @@ public class OnStartUp implements CommandLineRunner {
 				Zone zone = new Zone();
 				zone.setId(Long.parseLong(data[0]));
 				zone.setName(data[1]);
-				zone.setFlesh(Integer.parseInt(data[2]));
-				zone.setBones(Integer.parseInt(data[3]));
-				zone.setLeaves(Integer.parseInt(data[4]));
-				zone.setRoots(Integer.parseInt(data[5]));
 				zone.setLevel(Integer.parseInt(data[6]));
+				Random rand = new Random();
+				Integer maxPool = ZoneUtils.getMaxPoolSize(zone.getLevel());
+				zone.setFlesh(maxPool/5 + rand.nextInt(maxPool/2));//Integer.parseInt(data[2]));
+				zone.setBones(maxPool/5 + rand.nextInt(maxPool/2));//Integer.parseInt(data[3]));
+				zone.setLeaves(maxPool/5 + rand.nextInt(maxPool/2));//Integer.parseInt(data[4]));
+				zone.setRoots(maxPool/5 + rand.nextInt(maxPool/2));//Integer.parseInt(data[5]));
 				zone.setParts(new ArrayList<Part>());
 				int partsCount = 0;
-				int maxParts = 8;
-				boolean hasBody = false;
-				boolean hasLegs = false;
-				boolean hasArms = false;
-				boolean hasHead = false;
+				int maxParts = 8 + zone.getLevel();
+
 				Collections.shuffle(partsLoaded);
+				
+				Part body = CreatureUtils.getPartOfType(partsLoaded, "BODY");
+				zone.getParts().add(body);
+				Part head = CreatureUtils.getPartOfType(partsLoaded, "HEAD");
+				zone.getParts().add(head);
+				Part legs = CreatureUtils.getPartOfType(partsLoaded, "LEGS");
+				zone.getParts().add(legs);
+				Part arms = CreatureUtils.getPartOfType(partsLoaded, "ARMS");
+				zone.getParts().add(arms);
+				
 				for (int x = 0; x < partsLoaded.size(); x++) {
 					Part p = partsLoaded.get(x);
-					boolean wasAdded = false;
+					if(zone.getParts().contains(p)) continue;
 					if (p.getLevel() <= zone.getLevel()) {
-						// se ancora non ho raggiunto il numero minimo di parti, aggiungo a prescindere
-						// la parte in questione
-						switch (p.getType()) {
-							case "BODY":
-								if (!hasBody) {
-									zone.getParts().add(p);
-									partsCount++;
-									wasAdded = true;
-									hasBody = true;
-								}
-								break;
-							case "LEGS":
-								if (!hasLegs) {
-									zone.getParts().add(p);
-									partsCount++;
-									wasAdded = true;
-									hasLegs = true;
-								}
-								break;
-							case "ARMS":
-								if (!hasArms) {
-									zone.getParts().add(p);
-									partsCount++;
-									wasAdded = true;
-									hasArms = true;
-								}
-								break;
-							case "HEAD":
-								if (!hasHead) {
-									zone.getParts().add(p);
-									partsCount++;
-									wasAdded = true;
-									hasHead = true;
-								}
-								break;
-						}
-
-						if (!wasAdded) {
-							double r = Math.random();
-							double v = new Double(partsLoaded.size() - x) / new Double(partsLoaded.size());
-							if (r < v) {
-								zone.getParts().add(p);
-								partsCount++;
-							}
+						double r = Math.random();
+						double v = new Double(partsLoaded.size() - x) / new Double(partsLoaded.size());
+						if (r < v) {
+							zone.getParts().add(p);
+							partsCount++;
 						}
 					}
-
-					// se la zona ha caricato il numero massimo di parti mi fermo
 					if (partsCount >= maxParts)
 						break;
 				}

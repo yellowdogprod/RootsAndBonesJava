@@ -1,7 +1,9 @@
-package com.yellowdogprod.rootsandbones.profile;
+package com.yellowdogprod.rootsandbones.creaturerecipe;
 
 import java.util.List;
+import java.util.Objects;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -10,11 +12,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.yellowdogprod.rootsandbones.creature.CreaturePartId;
 import com.yellowdogprod.rootsandbones.parts.Part;
+import com.yellowdogprod.rootsandbones.profile.Profile;
 import com.yellowdogprod.rootsandbones.user.User;
 
 import lombok.EqualsAndHashCode;
@@ -24,28 +30,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-//@EqualsAndHashCode
+@EqualsAndHashCode
 @NoArgsConstructor
-@Entity
-public class Profile {
+public class CreatureRecipePartBean {
+	
+	private int partSlotIndex;
 
-	@Id @GeneratedValue
-	private Long id;
-	
-	@JsonIgnore
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
-    private User user;
-	
-	@ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "profile_part",
-           joinColumns = { @JoinColumn(name = "profile_id") },
-           inverseJoinColumns = { @JoinColumn(name = "part_id") })
-	private List<Part> parts;
-	
-	private Integer flesh = 10;
-	private Integer bones = 10;
-	private Integer leaves = 10;
-	private Integer roots = 10;
+	private Part part;
 	
 }

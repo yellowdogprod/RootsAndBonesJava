@@ -10,10 +10,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yellowdogprod.rootsandbones.ResponseBean;
+import com.yellowdogprod.rootsandbones.beans.ResourcesBean;
 import com.yellowdogprod.rootsandbones.creature.Creature;
+import com.yellowdogprod.rootsandbones.creature.CreaturePart;
+import com.yellowdogprod.rootsandbones.creature.CreatureRepository;
 import com.yellowdogprod.rootsandbones.parts.Part;
 import com.yellowdogprod.rootsandbones.parts.PartRepository;
+import com.yellowdogprod.rootsandbones.profile.Profile;
+import com.yellowdogprod.rootsandbones.profile.ProfileRepository;
+import com.yellowdogprod.rootsandbones.user.UserRepository;
 import com.yellowdogprod.rootsandbones.utils.CreatureUtils;
+import com.yellowdogprod.rootsandbones.utils.ResourceUtils;
+import com.yellowdogprod.rootsandbones.utils.ZoneUtils;
 
 @Service
 public class ZoneService {
@@ -26,6 +34,12 @@ public class ZoneService {
 	@Autowired
 	private ZoneRepository zoneRepo;
 
+	@Autowired
+	private ProfileRepository profileRepo;
+	
+	@Autowired
+	private CreatureRepository creatureRepo;
+	
 	public void save(Zone zone) {
 
 		zoneRepo.save(zone);
@@ -41,34 +55,55 @@ public class ZoneService {
 		}
 	}
 
-	public ResponseBean<List<Creature>> getCreaturesToFight(Long zoneId) {
-		List<Creature> creatures = new ArrayList<Creature>();
+	public ResponseBean<InvasionCombatBean> getCreaturesToFight(Long zoneId) {
+		InvasionCombatBean icb = new InvasionCombatBean();
 		// recupero la zona tramite id
 		Zone zona = zoneRepo.getOne(zoneId);
 
 		List<Part> availableParts = zona.getParts();
-		int randomNum = ThreadLocalRandom.current().nextInt(2, 5 + 1);
-		for (int x = 0; x < randomNum; x++) {
-			Creature creature = new Creature();
-			creature.setParts(new ArrayList<Part>());
-			
-			creature.getParts().add(CreatureUtils.getRandomPartOfType(availableParts, "BODY"));
-			creature.getParts().add(CreatureUtils.getRandomPartOfType(availableParts, "ARMS"));
-			creature.getParts().add(CreatureUtils.getRandomPartOfType(availableParts, "HEAD"));
-			creature.getParts().add(CreatureUtils.getRandomPartOfType(availableParts, "LEGS"));
-			
-		    float X = minX + new Random().nextFloat() * (maxX - minX);
-			
-			creature.setX(X);
-
-		    float Y = minY + new Random().nextFloat() * (maxY - minY);
-			
-			creature.setY(Y);
-			
-			creatures.add(creature);
-
-		}
-		return new ResponseBean<List<Creature>>(creatures);
+		icb.setParts(availableParts);
+		
+		Integer level = zona.getLevel();
+		Integer maxPoolSize = ZoneUtils.getMaxPoolSize(level);
+		icb.setFleshRatio( (float)zona.getFlesh() / (float)maxPoolSize );
+		icb.setBonesRatio( (float)zona.getBones() / (float)maxPoolSize );
+		icb.setLeavesRatio( (float)zona.getLeaves() / (float)maxPoolSize );
+		icb.setRootsRatio( (float)zona.getRoots() / (float)maxPoolSize );
+		
+		float avgRatio = (icb.getBonesRatio() + icb.getFleshRatio() + icb.getLeavesRatio() + icb.getRootsRatio() ) / 4;
+		Integer additionalCreatures = Math.round(avgRatio * 3);
+		icb.setNumberOfCreatures(level + additionalCreatures);
+		
+		return new ResponseBean<InvasionCombatBean>(icb);
 	}
 
+	public ResponseBean<EndCombatBean> fightEnded(Long userId, Long zoneId, EndCombatBean ecb) {
+		EndCombatBean result = new EndCombatBean();
+		result.setPlayerWon(ecb.isPlayerWon());
+		ResourcesBean rb = ecb.getDroppedResources();
+		rb.flesh = Math.round((float)rb.flesh * (float)Math.random());
+		rb.bones = Math.round((float)rb.bones * (float)Math.random());
+		rb.leaves = Math.round((float)rb.leaves * (float)Math.random());
+		rb.roots = Math.round((float)rb.roots * (float)Math.random());
+		result.setDroppedResources(rb);
+		Profile profile = profileRepo.findByUserId(userId).get();
+		Zone zone = zoneRepo.getOne(zoneId);
+		if(ecb.isPlayerWon()) {
+			ResourceUtils.addResources(profile, rb);
+			ResourceUtils.removeResources(zone, rb);
+		}else {
+			ResourceUtils.addResources(zone, rb);
+		}
+		for(Long creatureId : ecb.getPlayerDeadCreatures()) {
+			creatureRepo.deleteById(creatureId);
+		}
+		zoneRepo.save(zone);
+		profileRepo.save(profile);
+		return new ResponseBean<EndCombatBean>(result);
+	}
+
+	public ResponseBean<List<Zone>> getStartingZones(){
+		return new ResponseBean<List<Zone>>(zoneRepo.getStartingZones());
+	}
+	
 }

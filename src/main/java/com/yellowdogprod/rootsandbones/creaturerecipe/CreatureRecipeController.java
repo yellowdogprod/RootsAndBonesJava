@@ -1,4 +1,4 @@
-package com.yellowdogprod.rootsandbones.creature;
+package com.yellowdogprod.rootsandbones.creaturerecipe;
 
 import java.util.List;
 
@@ -16,40 +16,36 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yellowdogprod.rootsandbones.ResponseBean;
 import com.yellowdogprod.rootsandbones.beans.VectorBean;
+import com.yellowdogprod.rootsandbones.creature.CreatureBean;
+import com.yellowdogprod.rootsandbones.creature.CreatureRequest;
+import com.yellowdogprod.rootsandbones.creature.CreatureService;
 import com.yellowdogprod.rootsandbones.user.User;
 import com.yellowdogprod.rootsandbones.user.UserService;
 
 import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping(path = "api/v1/creatures")
+@RequestMapping(path = "api/v1/recipes")
 @AllArgsConstructor
-public class CreatureController {
+public class CreatureRecipeController {
 	
-	@Autowired
-	private CreatureService creatureService;
 	
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private CreatureRecipeService crs;
+	
 	@PostMapping
-	public ResponseBean<CreatureBean> create(@RequestBody CreatureRequest req, HttpSession session){
+	public ResponseBean<CreatureRecipe> create(@RequestBody CreatureRecipeRequest req, HttpSession session){
 		Long userId = (Long)session.getAttribute("userId");
-		return creatureService.create(req, userId);
+		return crs.createRecipe(userId, req);
 	}
 	
-
 	@GetMapping
-	public ResponseBean<List<CreatureBean>> getProfileCreatures(HttpSession session){
+	public ResponseBean<List<CreatureRecipeBean>> getRecipes(HttpSession session){
 		Long userId = (Long)session.getAttribute("userId");
-		User user = userService.getUserById(userId);
-		return creatureService.getProfileCreatures(user.getProfile().getId());
-	}
-	
-	@PutMapping
-	public ResponseBean<Boolean> deployCreature(HttpSession session, @RequestBody CreatureRequest req){
-		Long userId = (Long)session.getAttribute("userId");
-		return creatureService.deployCreature(userId, req);
+		return crs.getRecipes(userId);
 	}
 	
 	

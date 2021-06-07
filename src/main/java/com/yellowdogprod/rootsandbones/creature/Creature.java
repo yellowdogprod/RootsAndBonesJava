@@ -1,7 +1,9 @@
 package com.yellowdogprod.rootsandbones.creature;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -10,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
@@ -38,14 +41,17 @@ public class Creature {
 	@JoinColumn(name = "profile_id")
     private Profile profile;
 	
-	@ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "creature_part",
-           joinColumns = { @JoinColumn(name = "creature_id") },
-           inverseJoinColumns = { @JoinColumn(name = "part_id") })
-	private List<Part> parts;
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "creature", cascade = CascadeType.ALL)
+	private List<CreaturePart> parts = new ArrayList<CreaturePart>();
+	
 	private Float x;
 	private Float y;
 	private Boolean onField = false;
 	
+	public void addPart(Part p, Integer psi) {
+		CreaturePart cp = new CreaturePart(this, p, psi);
+		parts.add(cp);
+		p.getCreatureParts().add(cp);
+	}
 	
 }

@@ -1,7 +1,12 @@
-package com.yellowdogprod.rootsandbones.creature;
+package com.yellowdogprod.rootsandbones.creaturerecipe;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import com.yellowdogprod.rootsandbones.beans.ResourcesBean;
 import com.yellowdogprod.rootsandbones.beans.VectorBean;
+import com.yellowdogprod.rootsandbones.creature.CreaturePartBean;
+import com.yellowdogprod.rootsandbones.parts.Part;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -15,13 +20,11 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class CreatureRequest {
+public class CreatureRecipeRequest {
 
-	private CreatureBean creature;
-	private ResourcesBean cost;
-	private VectorBean position;
-	private Long recipeId;
-	private Boolean deploy;
+
+	private List<CreaturePartBean> parts = new ArrayList<CreaturePartBean>();
+	
 	
 }
 
